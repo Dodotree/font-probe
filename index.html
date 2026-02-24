@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Font Probe Example</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    p {
+      margin: 0;
+      opacity: 0.85;
+    }
+
+    .card {
+      border: 1px solid color-mix(in oklab, CanvasText 20%, Canvas);
+      border-radius: 10px;
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 64px;
+      border-radius: 8px;
+      border: 1px solid color-mix(in oklab, CanvasText 25%, Canvas);
+      padding: 10px;
+      font: inherit;
+      box-sizing: border-box;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    button {
+      width: fit-content;
+      border: 1px solid color-mix(in oklab, CanvasText 30%, Canvas);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font: inherit;
+      cursor: pointer;
+      background: color-mix(in oklab, CanvasText 8%, Canvas);
+      color: CanvasText;
+    }
+
+    .preview {
+      border: 1px dashed color-mix(in oklab, CanvasText 30%, Canvas);
+      border-radius: 8px;
+      padding: 12px;
+      line-height: 1.4;
+    }
+
+    .group {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .group-title {
+      font-weight: 600;
+    }
+
+    .available-row {
+      display: grid;
+      gap: 4px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid color-mix(in oklab, CanvasText 20%, Canvas);
+    }
+
+    .available-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .available-sample {
+      opacity: 0.95;
+    }
+
+    .muted {
+      opacity: 0.75;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Font Probe Example</h1>
+    <p>Paste a comma-separated font family list, apply it to preview text, and inspect probe results.</p>
+
+    <section class="card">
+      <label for="fontInput">Font list</label>
+      <textarea id="fontInput" spellcheck="false">Inter, "Segoe UI", Helvetica Neue, Arial, monospace, Fantasy Missing Font</textarea>
+      <button id="probeButton" type="button">Probe Fonts</button>
+    </section>
+
+    <section class="card">
+      <div class="group-title">Preview (applies full list in order)</div>
+      <div id="preview" class="preview">The quick brown fox jumps over the lazy dog 1234567890</div>
+    </section>
+
+    <section class="card">
+      <div class="group-title">Results</div>
+      <div id="results"></div>
+    </section>
+  </main>
+
+  <script type="module" src="./example.js"></script>
+</body>
+</html>
