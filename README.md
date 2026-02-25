@@ -2,6 +2,10 @@
 
 Browser font probing utility that uses canvas typography signatures to estimate whether a requested font is actually rendering.
 
+## Why font-probe?
+
+The idea of truly "web-safe" fonts is much less reliable today than it used to be, the same font stack can resolve differently across clients. When you let users choose from a list of fonts, JavaScript alone does not clearly tell you which font from that list is actually being rendered on that specific device. I could not find an existing package focused on reliably answering that question in the browser, so I built tiny `font-probe` to help surface the fonts that are really rendering for each client.
+
 ## Install
 
 ```bash
