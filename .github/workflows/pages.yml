@@ -40,6 +40,14 @@ jobs:
           cp example.js site/example.js
           cp -R dist site/dist
 
+      - name: Verify site artifact contents
+        run: |
+          test -f site/index.html
+          test -f site/example.js
+          test -f site/dist/index.js
+          test -f site/dist/font-probe.min.js
+          find site -maxdepth 3 -type f | sort
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
