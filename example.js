@@ -1,4 +1,8 @@
-import { FontProbe } from "./dist/index.js";
+const FontProbe = window.FontProbeLib?.FontProbe;
+
+if (!FontProbe) {
+  throw new Error("font-probe browser bundle did not load.");
+}
 
 const previewText = "The quick brown fox jumps over the lazy dog 1234567890";
 
