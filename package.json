@@ -5,12 +5,15 @@
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
+  "unpkg": "./dist/font-probe.min.js",
+  "jsdelivr": "./dist/font-probe.min.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./browser": "./dist/font-probe.min.js"
   },
   "files": [
     "dist",
@@ -18,7 +21,9 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "npm run build:types && npm run build:browser",
+    "build:types": "tsc -p tsconfig.json",
+    "build:browser": "esbuild index.ts --bundle --minify --format=iife --platform=browser --global-name=FontProbeLib --outfile=dist/font-probe.min.js",
     "check": "tsc -p tsconfig.json --noEmit",
     "example": "npm run build && npx --yes http-server . -c-1",
     "prepublishOnly": "npm run build"
@@ -33,6 +38,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "esbuild": "^0.27.3",
     "typescript": "^5.9.2"
   }
 }

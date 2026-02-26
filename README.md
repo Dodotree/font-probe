@@ -30,6 +30,19 @@ for (const name of candidates) {
 }
 ```
 
+### Browser usage (no TypeScript)
+
+```html
+<script src="https://unpkg.com/font-probe/dist/font-probe.min.js"></script>
+<script>
+  const probe = new window.FontProbeLib.FontProbe();
+  const signal = window.FontProbeLib.FontProbe.getFontDistinctSignal("Arial");
+  console.log(signal.label);
+</script>
+```
+
+Standalone example file: `examples/cdn-demo.html`
+
 Possible labels:
 
 - `available`
@@ -39,7 +52,7 @@ Possible labels:
 
 ## Demo
 
-https://dodotree.github.io/font-probe/
+[https://dodotree.github.io/font-probe/](https://dodotree.github.io/font-probe/)
 
 How to use:
 
