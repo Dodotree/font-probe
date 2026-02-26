@@ -19,8 +19,6 @@ npm install font-probe
 ```ts
 import { FontProbe } from "font-probe";
 
-new FontProbe();
-
 const stack = 'Inter, "Segoe UI", Arial, sans-serif';
 const candidates = FontProbe.splitFontFamilyList(stack);
 

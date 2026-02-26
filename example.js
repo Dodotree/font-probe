@@ -15,8 +15,6 @@ if (!input || !button || !preview || !results) {
   throw new Error("Missing required DOM nodes for the example page.");
 }
 
-new FontProbe();
-
 function escapeHtml(value) {
   return value
     .replaceAll("&", "&amp;")
