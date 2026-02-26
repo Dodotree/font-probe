@@ -50,6 +50,8 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -66,3 +68,27 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify deployed URLs
+        run: |
+          base="${{ steps.deployment.outputs.page_url }}"
+          paths=("" "example.js" "dist/font-probe.min.js" "dist/index.js")
+
+          for path in "${paths[@]}"; do
+            url="${base}${path}"
+            ok=0
+            for attempt in 1 2 3 4 5; do
+              code=$(curl -sS -o /dev/null -w "%{http_code}" "$url")
+              echo "Attempt $attempt: $url -> $code"
+              if [ "$code" = "200" ]; then
+                ok=1
+                break
+              fi
+              sleep 5
+            done
+
+            if [ "$ok" -ne 1 ]; then
+              echo "Expected 200 for $url"
+              exit 1
+            fi
+          done
