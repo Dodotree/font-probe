@@ -11,6 +11,6 @@
     "outDir": "dist",
     "skipLibCheck": true
   },
-  "include": ["font-probe.ts", "index.ts"],
+  "include": ["font-probe.ts"],
   "exclude": ["dist", "node_modules", "settings.ts"]
 }

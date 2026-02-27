@@ -3,15 +3,15 @@
   "version": "0.1.4",
   "description": "Browser font availability probe using canvas typography signatures.",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
+  "main": "./dist/font-probe.js",
+  "module": "./dist/font-probe.js",
   "unpkg": "./dist/font-probe.min.js",
   "jsdelivr": "./dist/font-probe.min.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/font-probe.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/font-probe.d.ts",
+      "import": "./dist/font-probe.js"
     },
     "./browser": "./dist/font-probe.min.js"
   },
@@ -23,7 +23,7 @@
   "scripts": {
     "build": "npm run build:types && npm run build:browser",
     "build:types": "tsc -p tsconfig.json",
-    "build:browser": "esbuild index.ts --bundle --minify --format=iife --platform=browser --global-name=FontProbeLib --outfile=dist/font-probe.min.js",
+    "build:browser": "esbuild font-probe.ts --bundle --minify --format=iife --platform=browser --global-name=FontProbeLib --outfile=dist/font-probe.min.js",
     "check": "tsc -p tsconfig.json --noEmit",
     "example": "npm run build && npx --yes http-server . -c-1",
     "prepublishOnly": "npm run build"

@@ -48,8 +48,6 @@ for (const name of candidates) {
 </script>
 ```
 
-Standalone example file: `examples/cdn-demo.html`
-
 Possible labels:
 
 - `available`
