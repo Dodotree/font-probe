@@ -29,12 +29,52 @@ function toQuotedFamily(name) {
   return `"${escaped}"`;
 }
 
+const genericFamilies = new Set([
+  "serif",
+  "sans-serif",
+  "monospace",
+  "cursive",
+  "fantasy",
+  "system-ui",
+  "emoji",
+  "math",
+  "fangsong",
+  "ui-serif",
+  "ui-sans-serif",
+  "ui-monospace",
+  "ui-rounded",
+]);
+
+function toCssFontFamilyList(rawList) {
+  const parts = FontProbe.splitFontFamilyList(rawList);
+  if (!parts.length) {
+    return "sans-serif";
+  }
+
+  return parts
+    .map((name) => {
+      const normalized = FontProbe.cleanFontCandidate(name);
+      if (!normalized) {
+        return null;
+      }
+      if (genericFamilies.has(normalized.toLowerCase())) {
+        return normalized.toLowerCase();
+      }
+      return toQuotedFamily(normalized);
+    })
+    .filter(Boolean)
+    .join(", ");
+}
+
 function render() {
   const rawList = String(input.value || "").trim();
   const candidates = FontProbe.splitFontFamilyList(rawList);
+  const cssFontFamily = toCssFontFamilyList(rawList);
 
   preview.textContent = previewText;
-  preview.style.fontFamily = rawList || "sans-serif";
+  preview.style.fontFamily = cssFontFamily;
+
+  console.log("Probing candidates:", rawList, candidates, "with preview font-family:", preview.style.fontFamily);
 
   if (!candidates.length) {
     results.innerHTML = '<div class="muted">No font names provided.</div>';
