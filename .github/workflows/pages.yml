@@ -44,7 +44,7 @@ jobs:
         run: |
           test -f site/index.html
           test -f site/example.js
-          test -f site/dist/index.js
+          test -f site/dist/font-probe.js
           test -f site/dist/font-probe.min.js
           find site -maxdepth 3 -type f | sort
 
