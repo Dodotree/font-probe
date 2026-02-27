@@ -1,6 +1,6 @@
 {
   "name": "font-probe",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Browser font availability probe using canvas typography signatures.",
   "type": "module",
   "main": "./dist/index.js",
