@@ -33,7 +33,6 @@ for (const name of candidates) {
 ```html
 <script src="https://unpkg.com/font-probe/dist/font-probe.min.js"></script>
 <script>
-  const probe = new window.FontProbeLib.FontProbe();
   const signal = window.FontProbeLib.FontProbe.getFontDistinctSignal("Arial");
   console.log(signal.label);
 </script>

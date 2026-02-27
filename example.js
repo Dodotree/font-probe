@@ -15,66 +15,15 @@ if (!input || !button || !preview || !results) {
   throw new Error("Missing required DOM nodes for the example page.");
 }
 
-function escapeHtml(value) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
-
-function toQuotedFamily(name) {
-  const escaped = String(name).replaceAll('"', "\\\"");
-  return `"${escaped}"`;
-}
-
-const genericFamilies = new Set([
-  "serif",
-  "sans-serif",
-  "monospace",
-  "cursive",
-  "fantasy",
-  "system-ui",
-  "emoji",
-  "math",
-  "fangsong",
-  "ui-serif",
-  "ui-sans-serif",
-  "ui-monospace",
-  "ui-rounded",
-]);
-
-function toCssFontFamilyList(rawList) {
-  const parts = FontProbe.splitFontFamilyList(rawList);
-  if (!parts.length) {
-    return "sans-serif";
-  }
-
-  return parts
-    .map((name) => {
-      const normalized = FontProbe.cleanFontCandidate(name);
-      if (!normalized) {
-        return null;
-      }
-      if (genericFamilies.has(normalized.toLowerCase())) {
-        return normalized.toLowerCase();
-      }
-      return toQuotedFamily(normalized);
-    })
-    .filter(Boolean)
-    .join(", ");
-}
-
 function render() {
   const rawList = String(input.value || "").trim();
   const candidates = FontProbe.splitFontFamilyList(rawList);
-  const cssFontFamily = toCssFontFamilyList(rawList);
+  const cssFontFamily = FontProbe.candidatesToCss(candidates);
 
   preview.textContent = previewText;
   preview.style.fontFamily = cssFontFamily;
 
-  console.log("Probing candidates:", rawList, candidates, "with preview font-family:", preview.style.fontFamily);
+  console.log("Probing candidates:", rawList, candidates);
 
   if (!candidates.length) {
     results.innerHTML = '<div class="muted">No font names provided.</div>';
@@ -88,33 +37,27 @@ function render() {
     "not found": [],
   };
 
-  for (const rawName of candidates) {
-    const name = FontProbe.cleanFontCandidate(rawName);
-    if (!name) {
-      continue;
-    }
-
+  for (const name of candidates) {
     const signal = FontProbe.getFontDistinctSignal(name);
     const key = signal.label;
     if (!Object.hasOwn(grouped, key)) {
       grouped["not rendering"].push(name);
       continue;
     }
-
     grouped[key].push(name);
   }
+
+  console.log("Grouped results:", grouped);
 
   const sections = [];
 
   if (grouped.available.length) {
     const rows = grouped.available
       .map((name) => {
-        const escapedName = escapeHtml(name);
-        const styleFamily = `${toQuotedFamily(name)}, sans-serif`;
         return `
           <div class="available-row">
-            <div class="available-name">${escapedName}</div>
-            <div class="available-sample" style="font-family: ${escapeHtml(styleFamily)}">${escapeHtml(previewText)}</div>
+            <div class="available-name">${name}</div>
+            <div class="available-sample" style='font-family:\"${name}\"'>${previewText}</div>
           </div>
         `;
       })
@@ -141,9 +84,9 @@ function render() {
   sections.push(`
     <div class="group">
       <div class="group-title">others</div>
-      <div>${escapeHtml(genericLine)}</div>
-      <div>${escapeHtml(notRenderingLine)}</div>
-      <div>${escapeHtml(notFoundLine)}</div>
+      <div>${genericLine}</div>
+      <div>${notRenderingLine}</div>
+      <div>${notFoundLine}</div>
     </div>
   `);
 
