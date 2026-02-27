@@ -23,8 +23,6 @@ function render() {
   preview.textContent = previewText;
   preview.style.fontFamily = cssFontFamily;
 
-  console.log("Probing candidates:", rawList, candidates);
-
   if (!candidates.length) {
     results.innerHTML = '<div class="muted">No font names provided.</div>';
     return;
@@ -46,8 +44,6 @@ function render() {
     }
     grouped[key].push(name);
   }
-
-  console.log("Grouped results:", grouped);
 
   const sections = [];
 
