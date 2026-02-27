@@ -55,11 +55,6 @@ export class FontProbe {
         }
         const fontsOne = FontProbe.FONT_ONE_VARIANTS;
         const fontsTwo = FontProbe.FONT_TWO_VARIANTS;
-        const measureCanvas = document.createElement("canvas");
-        const context = measureCanvas.getContext("2d");
-        if (!context) {
-            return;
-        }
 
         for (let i = 0; i < fontsOne.length; i++) {
             const fontName1 = fontsOne[i];
@@ -156,65 +151,36 @@ export class FontProbe {
         if (!context) {
             return null;
         }
-        const xMetrics = this.measureTextMetrics(
-            context,
-            fontFamily,
-            FontProbe.METRIC_SAMPLE.xHeight,
-        );
-        const capMetrics = this.measureTextMetrics(
-            context,
-            fontFamily,
-            FontProbe.METRIC_SAMPLE.capHeight,
-        );
-        const emMetrics = this.measureTextMetrics(
-            context,
-            fontFamily,
-            FontProbe.METRIC_SAMPLE.emWidth,
-        );
-        const normalMetrics = this.measureTextMetrics(
-            context,
-            fontFamily,
-            FontProbe.METRIC_SAMPLE.normalWidth,
-        );
+        context.font = `32px ${fontFamily}`;
 
-        if (!xMetrics || !capMetrics || !emMetrics || !normalMetrics) {
-            return null;
-        }
+        let metrics = context.measureText(FontProbe.METRIC_SAMPLE.xHeight);
+        const xWidth = metrics.width;
+        const xHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+
+        metrics = context.measureText(FontProbe.METRIC_SAMPLE.capHeight);
+        const capWidth = metrics.width;
+        const capHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+
+        // Canvas also provides emHeight (height of the type block) if needed
 
         const emCount = FontProbe.METRIC_SAMPLE.emWidth.length;
         const normalCount = FontProbe.METRIC_SAMPLE.normalWidth.length;
 
-        return {
-            xHeight: xMetrics.height,
-            capHeight: capMetrics.height,
-            emWidth: emMetrics.width / emCount,
-            normalWidth: normalMetrics.width / normalCount,
-        };
-    }
+        metrics = context.measureText(FontProbe.METRIC_SAMPLE.emWidth);
+        const emWidth = metrics.width / Math.max(1, emCount);
 
-    public static measureTextMetrics(
-        context: CanvasRenderingContext2D,
-        fontFamily: string,
-        sample: string,
-    ): { width: number; height: number } | null {
-        context.font = `32px ${fontFamily}`;
-        const metrics = context.measureText(sample);
+        metrics = context.measureText(FontProbe.METRIC_SAMPLE.normalWidth);
+        const normalWidth = metrics.width / Math.max(1, normalCount);
 
-        const ascent = Number.isFinite(metrics.actualBoundingBoxAscent)
-            ? metrics.actualBoundingBoxAscent
-            : 0;
-        const descent = Number.isFinite(metrics.actualBoundingBoxDescent)
-            ? metrics.actualBoundingBoxDescent
-            : 0;
-        const height = Math.max(1, ascent + descent);
-
-        if (!Number.isFinite(metrics.width) || metrics.width <= 0) {
+        if (!xWidth || !capWidth || !emWidth || !normalWidth) {
             return null;
         }
 
         return {
-            width: metrics.width,
-            height,
+            xHeight,
+            capHeight,
+            emWidth,
+            normalWidth,
         };
     }
 
@@ -235,17 +201,17 @@ export class FontProbe {
         if (!first || !second) {
             return false;
         }
-        const maxHeightBase = Math.max(1, second.capHeight);
-        const maxWidthBase = Math.max(1, second.emWidth);
+        const maxHeight = Math.max(1, Math.max(first.capHeight, second.capHeight));
+        const maxWidth = Math.max(1, Math.max(first.emWidth, second.emWidth));
 
         const xHeightDelta =
-            Math.abs(first.xHeight - second.xHeight) / maxHeightBase;
+            Math.abs(first.xHeight - second.xHeight) / maxHeight;
         const capHeightDelta =
-            Math.abs(first.capHeight - second.capHeight) / maxHeightBase;
+            Math.abs(first.capHeight - second.capHeight) / maxHeight;
         const emWidthDelta =
-            Math.abs(first.emWidth - second.emWidth) / maxWidthBase;
+            Math.abs(first.emWidth - second.emWidth) / maxWidth;
         const normalWidthDelta =
-            Math.abs(first.normalWidth - second.normalWidth) / maxWidthBase;
+            Math.abs(first.normalWidth - second.normalWidth) / maxWidth;
 
         const aggregateDelta =
             (xHeightDelta + capHeightDelta + emWidthDelta + normalWidthDelta) / 4;

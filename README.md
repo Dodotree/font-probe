@@ -8,6 +8,16 @@ The idea of truly "web-safe" fonts is much less reliable today than it used to b
 
 ![Online editor font settings use case](./Screenshot.png)
 
+## Demo
+
+[https://dodotree.github.io/font-probe/](https://dodotree.github.io/font-probe/)
+
+How to use:
+
+1. Enter a comma-separated list of font names in the text area.
+2. Click **Probe Fonts**.
+3. Check **available** (with samples) and **others** (`generic`, `not rendering`, `not found`).
+
 ## Install
 
 ```bash
@@ -46,16 +56,6 @@ Possible labels:
 - `generic`
 - `not rendering`
 - `not found`
-
-## Demo
-
-[https://dodotree.github.io/font-probe/](https://dodotree.github.io/font-probe/)
-
-How to use:
-
-1. Enter a comma-separated list of font names in the text area.
-2. Click **Probe Fonts**.
-3. Check **available** (with samples) and **others** (`generic`, `not rendering`, `not found`).
 
 ## Ready example
 
